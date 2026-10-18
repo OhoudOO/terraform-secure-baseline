@@ -1,4 +1,4 @@
-# Secure Terraform baseline (AWS)
+# Secure Terraform baseline (AWS and GCP)
 
 Starting point for the "Secure IaC & Cloud Engineering" service: an AWS account baseline and
 one network per environment, deployed from GitHub without stored keys.
@@ -23,11 +23,25 @@ one network per environment, deployed from GitHub without stored keys.
 5. GitHub: create environments `dev`, `staging`, `prod` (required reviewers on staging and prod), add the
    repository variables used in `.github/workflows/terraform.yml`, then set `DEPLOY_ENABLED=true`.
 
+## GCP (`gcp/`)
+
+Same structure for Google Cloud, one project per environment, default region `me-central2` (Dammam):
+
+| Folder | What it creates |
+| --- | --- |
+| `gcp/bootstrap/` | CMEK-encrypted, versioned state bucket with public access prevention |
+| `gcp/modules/logging` | Admin and data access audit logs, exported by a log sink to a CMEK bucket with a retention policy (`lock_retention` makes it permanent) |
+| `gcp/modules/guardrails` | Project organization policies: no service account keys, no public buckets, uniform bucket access, OS Login, no default network, no VM external IPs, no public Cloud SQL (needs the project inside an organization) |
+| `gcp/modules/network` | Custom VPC, private subnet with Private Google Access and flow logs, Cloud NAT, explicit deny-all ingress |
+| `gcp/modules/github-wif` | Workload Identity Federation limited to one repository and one GitHub environment, and a deploy service account with the roles you pass |
+
+Deploys run from `.github/workflows/terraform-gcp.yml` once the repository variable `DEPLOY_ENABLED_GCP` is true.
+
 ## Checks
 
 `scripts/check.sh` runs what CI runs, with Docker only: `terraform fmt`, `validate` for every root,
 Trivy (blocks on HIGH/CRITICAL) and Checkov (blocks on any failure). Every Checkov skip in the code carries a reason.
 
-Tested October 2026: all four roots validate with Terraform 1.16 and AWS provider 6.x; Trivy reports no HIGH or
-CRITICAL issues; Checkov passes 134 checks with 0 failures and 23 documented skips. **Not yet applied to a real AWS
-account**: run the first apply in a sandbox account and review the plan before using it for a client.
+Tested October 2026: all eight roots (AWS and GCP) validate with Terraform 1.16 and AWS provider 6.x; Trivy reports no HIGH or
+CRITICAL issues; Checkov passes 165 checks with 0 failures and 31 documented skips. **Not yet applied to a real AWS account or
+GCP project**: run the first apply in a sandbox and review the plan before using it for a client.

@@ -1,0 +1,2 @@
+# Copy to backend.hcl and fill in the bootstrap output.
+bucket = "ADMIN_PROJECT-tfstate"

@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 TF=(docker run --rm -v "$PWD:/w" -v tfplugins:/root/.terraform.d/plugin-cache -e TF_PLUGIN_CACHE_DIR=/root/.terraform.d/plugin-cache)
 "${TF[@]}" -w /w hashicorp/terraform:latest fmt -recursive -check -diff
-for dir in bootstrap envs/dev envs/staging envs/prod; do
+for dir in bootstrap envs/dev envs/staging envs/prod gcp/bootstrap gcp/envs/dev gcp/envs/staging gcp/envs/prod; do
   "${TF[@]}" -w "/w/$dir" hashicorp/terraform:latest init -backend=false -input=false >/dev/null
   "${TF[@]}" -w "/w/$dir" hashicorp/terraform:latest validate -no-color
 done

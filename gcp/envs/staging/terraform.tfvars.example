@@ -1,0 +1,4 @@
+project_id           = "acme-staging"
+name                 = "acme"
+github_repository    = "acme/platform"
+deploy_project_roles = ["roles/run.admin", "roles/artifactregistry.writer"]

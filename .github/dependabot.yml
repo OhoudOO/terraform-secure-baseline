@@ -5,6 +5,6 @@ updates:
     schedule: { interval: weekly }
     cooldown: { default-days: 7 }
   - package-ecosystem: terraform
-    directories: [/bootstrap, /envs/dev, /envs/staging, /envs/prod]
+    directories: [/bootstrap, /envs/dev, /envs/staging, /envs/prod, /gcp/bootstrap, /gcp/envs/dev, /gcp/envs/staging, /gcp/envs/prod]
     schedule: { interval: weekly }
     cooldown: { default-days: 7 }

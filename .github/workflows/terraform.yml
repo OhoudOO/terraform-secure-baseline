@@ -37,7 +37,7 @@ jobs:
         run: terraform fmt -recursive -check -diff
       - name: Validate
         run: |
-          for dir in bootstrap envs/dev envs/staging envs/prod; do
+          for dir in bootstrap envs/dev envs/staging envs/prod gcp/bootstrap gcp/envs/dev gcp/envs/staging gcp/envs/prod; do
             terraform -chdir="$dir" init -backend=false -input=false >/dev/null
             terraform -chdir="$dir" validate
           done
