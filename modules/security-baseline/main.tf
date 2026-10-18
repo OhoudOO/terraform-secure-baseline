@@ -1,0 +1,43 @@
+# Account and region guardrails: no public S3, encrypted EBS by default, strong IAM
+# passwords, GuardDuty threat detection and IAM Access Analyzer.
+terraform {
+  required_providers {
+    aws = { source = "hashicorp/aws", version = "~> 6.0" }
+  }
+}
+
+variable "name" {
+  type = string
+}
+
+resource "aws_s3_account_public_access_block" "this" {
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_ebs_encryption_by_default" "this" {
+  enabled = true
+}
+
+resource "aws_iam_account_password_policy" "this" {
+  minimum_password_length        = 14
+  require_lowercase_characters   = true
+  require_uppercase_characters   = true
+  require_numbers                = true
+  require_symbols                = true
+  allow_users_to_change_password = true
+  password_reuse_prevention      = 24
+  max_password_age               = 90
+}
+
+resource "aws_guardduty_detector" "this" {
+  #checkov:skip=CKV2_AWS_3:Single-account baseline; for AWS Organizations enable GuardDuty from the delegated admin account.
+  enable = true
+}
+
+resource "aws_accessanalyzer_analyzer" "this" {
+  analyzer_name = "${var.name}-access-analyzer"
+  type          = "ACCOUNT"
+}

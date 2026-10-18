@@ -1,0 +1,3 @@
+project            = "acme"
+github_repository  = "acme/platform"
+deploy_policy_arns = ["arn:aws:iam::ACCOUNT_ID:policy/acme-dev-deploy"]

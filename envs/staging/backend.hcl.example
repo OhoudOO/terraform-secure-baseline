@@ -1,0 +1,4 @@
+# Copy to backend.hcl and fill in the bootstrap output.
+bucket     = "PROJECT-tfstate-ACCOUNT_ID"
+region     = "me-south-1"
+kms_key_id = "arn:aws:kms:me-south-1:ACCOUNT_ID:key/KEY_ID"
