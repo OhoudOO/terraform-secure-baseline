@@ -42,6 +42,6 @@ Deploys run from `.github/workflows/terraform-gcp.yml` once the repository varia
 `scripts/check.sh` runs what CI runs, with Docker only: `terraform fmt`, `validate` for every root,
 Trivy (blocks on HIGH/CRITICAL) and Checkov (blocks on any failure). Every Checkov skip in the code carries a reason.
 
-Tested October 2026: all eight roots (AWS and GCP) validate with Terraform 1.16 and AWS provider 6.x; Trivy reports no HIGH or
+Tested October 2026: all eight roots (AWS and GCP) validate with Terraform 1.16, AWS provider 6.x and Google provider 7.x; Trivy reports no HIGH or
 CRITICAL issues; Checkov passes 165 checks with 0 failures and 31 documented skips. **Not yet applied to a real AWS account or
 GCP project**: run the first apply in a sandbox and review the plan before using it for a client.
